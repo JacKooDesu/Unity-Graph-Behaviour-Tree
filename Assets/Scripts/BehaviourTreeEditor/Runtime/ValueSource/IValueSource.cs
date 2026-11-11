@@ -12,6 +12,7 @@ namespace BehaviourTreeEditor.Runtime
         string DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb);
     }
     public interface IValueSource<T> : IValueSource { }
+    [Serializable]
     public abstract class ValueSource<T> : IValueSource<T>
     {
         public Type TargetType => typeof(T);

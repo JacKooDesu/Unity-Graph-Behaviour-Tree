@@ -11,6 +11,7 @@ namespace BehaviourTreeEditor.Runtime
     [Serializable]
     public class DefaultContext : ISTypeProvider
     {
+        [Serializable]
         public class IVarWrapper { }
         [Serializable]
         public abstract class VarWrapper<T> : IVarWrapper
