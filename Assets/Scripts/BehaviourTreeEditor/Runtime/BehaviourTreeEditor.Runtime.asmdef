@@ -1,0 +1,17 @@
+{
+    "name": "BehaviourTreeEditor.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "UExtensions",
+        "Unity.Mathematics"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

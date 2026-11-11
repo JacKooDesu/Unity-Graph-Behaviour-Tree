@@ -1,0 +1,23 @@
+{
+    "name": "BehaviourTreeEditor.Editor",
+    "rootNamespace": "",
+    "references": [
+        "Unity.GraphToolkit.Common.Editor",
+        "Unity.GraphToolkit.Utility.Editor",
+        "Unity.GraphToolkit.Editor",
+        "BehaviourTreeEditor.Runtime",
+        "UExtensions",
+        "Unity.Mathematics"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

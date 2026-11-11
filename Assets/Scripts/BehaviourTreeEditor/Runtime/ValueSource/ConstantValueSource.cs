@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using UnityEngine;
+
+namespace BehaviourTreeEditor.Runtime
+{
+    [Serializable]
+    public class ConstantValueSource<T> : ValueSource<T>
+    {
+        [field: SerializeField]
+        public T Value { get; private set; }
+        public ConstantValueSource(T value) => Value = value;
+        public override Expression ToExpression(Dictionary<Type, object> resolver) =>
+            Expression.Constant(Value, TargetType);
+        public override IEnumerable<Type> GetRequiredResolveTypes()
+        {
+            if (Value is ValueSource<T> source)
+                foreach (var type in source.GetRequiredResolveTypes())
+                    yield return type;
+        }
+
+        public override string DeclareVariableBinding(
+            VariableHandler varHandler, ScriptBuilder sb)
+        {
+            var name = varHandler.GetCurrentLocalName();
+
+            var valueStr = Value switch
+            {
+                bool b => b ? "true" : "false",
+                string s => string.IsNullOrEmpty(s) ? "" : s,
+                _ => $"{Value}",
+            };
+
+            sb.Declare(name, valueStr, false);
+
+            return name;
+        }
+    }
+}
