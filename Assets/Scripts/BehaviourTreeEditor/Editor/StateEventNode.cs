@@ -1,5 +1,6 @@
 using System;
 using BehaviourTreeEditor.Runtime;
+using Unity.GraphToolkit.Editor;
 
 namespace BehaviourTreeEditor.Editor
 {
@@ -16,11 +17,14 @@ namespace BehaviourTreeEditor.Editor
     }
 
     [Serializable]
+    [Node("Callback", "", "On Enter")]
     internal class OnEnterNode : StateEventNode { }
 
     [Serializable]
+    [Node("Callback", "", "On Exit")]
     internal class OnExitNode : StateEventNode { }
 
     [Serializable]
+    [Node("Callback", "", "On Tick")]
     internal class OnTickNode : StateEventNode { }
 }

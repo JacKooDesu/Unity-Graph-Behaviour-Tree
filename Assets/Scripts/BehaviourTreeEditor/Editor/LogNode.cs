@@ -7,6 +7,7 @@ using UnityEngine;
 namespace BehaviourTreeEditor.Editor
 {
     [Serializable]
+    [Node("Action", "", "Log")]
     internal class LogNode : Node
     {
         internal override RuntimeNode Translate()

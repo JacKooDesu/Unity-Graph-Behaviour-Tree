@@ -10,6 +10,7 @@ using UnityEngine;
 namespace BehaviourTreeEditor.Editor
 {
     [Serializable]
+    [Node("Action", "", "Method Call")]
     internal class MethodCallNode : Node, IValueSourceConvertable
     {
         internal override RuntimeNode Translate()

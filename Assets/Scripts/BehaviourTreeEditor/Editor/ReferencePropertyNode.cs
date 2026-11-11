@@ -7,6 +7,7 @@ using Unity.GraphToolkit.Editor;
 namespace BehaviourTreeEditor.Editor
 {
     [Serializable]
+    [Node("Variable", "", "Reference Property")]
     internal class ReferencePropertyNode : Node, IReferenceNode, IValueSourceConvertable
     {
         const string OPTION_NAME = "OPTION";

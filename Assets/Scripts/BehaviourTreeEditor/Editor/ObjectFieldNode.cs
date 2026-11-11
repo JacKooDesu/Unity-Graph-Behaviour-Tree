@@ -10,6 +10,7 @@ using UnityEngine;
 namespace BehaviourTreeEditor.Editor
 {
     [Serializable]
+    [Node("Variable", "", "Object Field")]
     internal class ObjectFieldNode : Node, IReferenceNode, IValueSourceConvertable
     {
         const string TYPE_PORT = "type";
@@ -83,7 +84,7 @@ namespace BehaviourTreeEditor.Editor
                 fieldData.Type != SField.DefaultField.Type)
             {
                 fieldData.TryUpdateType(type);
-                
+
                 context.AddOutputPort(OUTPUT_VALUE_PORT)
                     .WithDisplayName("Value")
                     .WithDataType(fieldData.Field.FieldType)

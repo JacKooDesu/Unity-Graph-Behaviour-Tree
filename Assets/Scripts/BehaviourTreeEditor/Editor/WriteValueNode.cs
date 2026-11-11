@@ -7,6 +7,7 @@ using UnityEngine;
 namespace BehaviourTreeEditor.Editor
 {
     [Serializable]
+    [Node("Action", "", "Write Value")]
     internal class WriteValueNode : Node
     {
         internal override RuntimeNode Translate()

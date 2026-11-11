@@ -10,6 +10,7 @@ using UnityEngine;
 namespace BehaviourTreeEditor.Editor
 {
     [Serializable]
+    [Node("Variable", "", "Object Property")]
     internal class ObjectPropertyNode : Node, IReferenceNode, IValueSourceConvertable
     {
         const string TYPE_PORT = "type";
