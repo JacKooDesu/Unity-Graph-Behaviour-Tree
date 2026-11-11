@@ -1,0 +1,12 @@
+{
+  "name": "com.jackoo.unity-serialization-extend",
+  "displayName": "Serialization Enhancement",
+  "version": "0.0.1",
+  "unity": "6000.6",
+  "author": {
+    "name": "jackoodesu",
+    "url": "https://github.com/JacKooDesu"
+  },
+  "description": "Enhance unity serialization with C# Reflection.",
+  "dependencies": {}
+}
