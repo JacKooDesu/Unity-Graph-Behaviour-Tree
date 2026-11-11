@@ -9,6 +9,7 @@
   },
   "description": "Behaviour tree editor based on new GTK, with default executor convert tree asset into expression.",
   "dependencies": {
-    "com.jackoo.unity-serialization-extend": "https://github.com/JacKooDesu/Unity-Graph-Behaviour-Tree.git?path=Assets/Scripts/UExtensions"
+    "com.unity.graphtoolkit": "0.5.0-exp.1",
+    "com.jackoo.unity-serialization-extend": "0.0.1"
   }
 }
