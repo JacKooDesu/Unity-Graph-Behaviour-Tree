@@ -14,10 +14,10 @@ namespace BehaviourTreeEditor.Editor
     {
         internal const string EXTENSION_NAME = "btr";
 
-        List<IVariableBindingBlock> _variableBindings = new();
-        List<IVariableBindingBlock> _constantBindings = new();
-        public ReadOnlyCollection<IVariableBindingBlock> VariableBindings => _variableBindings.AsReadOnly();
-        public ReadOnlyCollection<IVariableBindingBlock> ConstantBindings => _constantBindings.AsReadOnly();
+        static List<IVariableBindingBlock> _variableBindings = new();
+        static List<IVariableBindingBlock> _constantBindings = new();
+        internal static ReadOnlyCollection<IVariableBindingBlock> VariableBindings => _variableBindings.AsReadOnly();
+        internal static ReadOnlyCollection<IVariableBindingBlock> ConstantBindings => _constantBindings.AsReadOnly();
 
         public Type GetBindingType(string key, bool isConstant)
         {
@@ -35,7 +35,7 @@ namespace BehaviourTreeEditor.Editor
         {
             base.OnGraphChanged(logger);
             FetchVariableBindings();
-            InjectContextVariables(logger);
+            // InjectContextVariables(logger);
             foreach (var node in GetNodes())
             {
                 if ((node is ISubgraphNode subGraph && subGraph.GetSubgraph() is StateTreeGraph) ||
@@ -56,7 +56,13 @@ namespace BehaviourTreeEditor.Editor
         public override void OnEnable()
         {
             FetchVariableBindings();
-            InjectContextVariables(null);
+            // InjectContextVariables(null);
+        }
+
+        public override void OnDisable()
+        {
+            _constantBindings.Clear();
+            _variableBindings.Clear();
         }
 
         void FetchVariableBindings()
@@ -89,7 +95,7 @@ namespace BehaviourTreeEditor.Editor
                 var varNodes = stateTreeGraph.GetNodes().OfType<VariableBindingReferenceBase>();
                 foreach (var vn in varNodes)
                 {
-                    vn.UpdateBindings(this);
+                    vn.UpdateBindings();
                     if (logger is not null)
                         vn.CheckSourceBindingChanged(logger);
                     vn.DefineNode();
@@ -133,6 +139,7 @@ namespace BehaviourTreeEditor.Editor
                 else if (node is VariableBindingReferenceBase vr)
                 {
                     vr.DefineNode();
+                    vr.UpdateBindings();
                 }
             }
         }

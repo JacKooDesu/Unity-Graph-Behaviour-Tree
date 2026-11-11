@@ -10,6 +10,8 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+[assembly: MakeSerializable(typeof(BehaviourTreeEditor.Editor.VariableBindingReferenceBase))]
+
 namespace BehaviourTreeEditor.Editor
 {
     [Serializable]
@@ -26,8 +28,6 @@ namespace BehaviourTreeEditor.Editor
         public string Key;
     }
 
-    // [Serializable]
-    // [UseWithGraph(typeof(StateTreeGraph))]
     internal abstract class VariableBindingReferenceBase : Node, IValueSourceConvertable
     {
         #region Interface
@@ -76,11 +76,11 @@ namespace BehaviourTreeEditor.Editor
                 .Build();
         }
 
-        protected abstract ReadOnlyCollection<BehaviourTreeEditor.Editor.IVariableBindingBlock> FetchBindings(Graph baseGraph);
+        protected abstract ReadOnlyCollection<BehaviourTreeEditor.Editor.IVariableBindingBlock> FetchBindings();
 
-        public void UpdateBindings(Graph baseGraph)
+        public void UpdateBindings()
         {
-            var bindings = FetchBindings(baseGraph);
+            var bindings = FetchBindings();
             var source = GetSource();
             source.bindings = bindings;
 
@@ -173,15 +173,15 @@ namespace BehaviourTreeEditor.Editor
                 .Build();
         }
 
-        protected override ReadOnlyCollection<IVariableBindingBlock> FetchBindings(Graph baseGraph) =>
-            baseGraph.VariableBindings;
+        protected override ReadOnlyCollection<IVariableBindingBlock> FetchBindings() =>
+            BehaviourTreeEditor.Editor.Graph.VariableBindings;
     }
 
     [Serializable]
     [UseWithGraph(typeof(StateTreeGraph))]
     internal class ConstantReference : VariableBindingReferenceBase
     {
-        protected override ReadOnlyCollection<IVariableBindingBlock> FetchBindings(Graph baseGraph) =>
-            baseGraph.ConstantBindings;
+        protected override ReadOnlyCollection<IVariableBindingBlock> FetchBindings() =>
+            BehaviourTreeEditor.Editor.Graph.ConstantBindings;
     }
 }
