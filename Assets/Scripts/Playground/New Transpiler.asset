@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: New Transpiler
   m_EditorClassIdentifier: BehaviourTreeEditor.Runtime::BehaviourTreeEditor.Runtime.Transpiler
   _contextTypes:
-  - _typeName: BehaviourTreeEditor.Runtime.DefaultContext, BehaviourTreeEditor.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - _typeName: UExtensions.SType+None, UExtensions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _runtimeGraphs:
   - {fileID: -8116140793486648412, guid: dfdd84118d912ee4ea96f7759a639a53, type: 3}
