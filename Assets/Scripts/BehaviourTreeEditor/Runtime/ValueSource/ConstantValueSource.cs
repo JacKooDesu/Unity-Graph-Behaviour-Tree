@@ -25,12 +25,7 @@ namespace BehaviourTreeEditor.Runtime
         {
             var name = varHandler.GetCurrentLocalName();
 
-            var valueStr = Value switch
-            {
-                bool b => b ? "true" : "false",
-                string s => string.IsNullOrEmpty(s) ? "" : s,
-                _ => $"{Value}",
-            };
+            var valueStr = string.Format(Common.CustomFormatter.Singleton, "{0}", Value);
 
             sb.Declare(name, valueStr, false);
 

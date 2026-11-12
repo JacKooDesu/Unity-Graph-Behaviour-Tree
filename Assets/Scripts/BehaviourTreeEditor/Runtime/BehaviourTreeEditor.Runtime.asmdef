@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "UExtensions",
-        "Unity.Mathematics"
+        "Unity.Mathematics",
+        "BehaviourTreeEditor.Common"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
