@@ -36,7 +36,7 @@ namespace BehaviourTreeEditor.Runtime
                 yield return FieldData.Type;
         }
 
-        public string DeclareVariableBinding(
+        public VariableAccess DeclareVariableBinding(
             VariableHandler varHandler, ScriptBuilder sb)
         {
             var fi = FieldData.Field;
@@ -45,14 +45,14 @@ namespace BehaviourTreeEditor.Runtime
             if (fi.IsStatic)
             {
                 sb.Declare(name, $"{TargetType.FullName}.{fi.Name}");
-                return name;
+                return new LocalVariableAccess(name);
             }
 
             var paramterName = varHandler.GetMethodParameter(FieldData.Type);
 
             sb.Declare(name, $"{paramterName}.{fi.Name}");
 
-            return name;
+            return new LocalVariableAccess(name);
         }
     }
 

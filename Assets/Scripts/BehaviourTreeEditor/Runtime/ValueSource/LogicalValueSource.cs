@@ -47,7 +47,7 @@ namespace BehaviourTreeEditor.Runtime
                 yield return type;
         }
 
-        public override string DeclareVariableBinding(
+        public override VariableAccess DeclareVariableBinding(
             VariableHandler varHandler, ScriptBuilder sb)
         {
             var left = varHandler.GetOrRegisterVariableBinding(Left, sb);
@@ -72,7 +72,7 @@ namespace BehaviourTreeEditor.Runtime
 
             sb.Declare(name, value, false);
 
-            return name;
+            return new LocalVariableAccess(name);
         }
     }
 }

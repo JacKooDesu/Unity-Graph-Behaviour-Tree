@@ -4,6 +4,12 @@ using System.Text;
 
 namespace BehaviourTreeEditor.Runtime
 {
+    public abstract record VariableAccess(string Value);
+    public record DirectChainedAccess(string Value) : VariableAccess(Value);
+    public record LocalVariableAccess(string Value) : VariableAccess(Value);
+    public record EnumeratorAccess(string Value) : VariableAccess(Value);
+    public record InvalidAccess(string Error) : VariableAccess("");
+
     public abstract class VariableHandler
     {
         protected List<IVariableBinding> _variableBindings = new();
@@ -38,6 +44,17 @@ namespace BehaviourTreeEditor.Runtime
             return name;
         }
 
+        public VariableAccess GetVariableAccess(
+            IValueSource source,
+            ScriptBuilder sb)
+        {
+            // enum only get scope var
+            if (source is EnumeratorRuntimeNode.EnumerableScopeValueSource)
+                return new EnumeratorAccess(GetCurrentIterTargetName());
+            
+            return new InvalidAccess("Invalid");
+        }
+
         public string GetOrRegisterVariableBinding(
             IValueSource source,
             ScriptBuilder sb)
@@ -60,9 +77,9 @@ namespace BehaviourTreeEditor.Runtime
                 return localName;
 
             var newName = source.DeclareVariableBinding(this, sb);
-            _localVariables.Add(source, newName);
+            _localVariables.Add(source, newName.Value);
 
-            return newName;
+            return newName.Value;
         }
 
         public int BeginIterScope(string targetName)
@@ -79,6 +96,11 @@ namespace BehaviourTreeEditor.Runtime
 
             _currentIterScope--;
             _iterTargetStack.Pop();
+        }
+
+        public string Traverse()
+        {
+            return string.Empty;
         }
 
         public string GetCurrentIterIndexName() => $"iter_{_currentIterScope}";

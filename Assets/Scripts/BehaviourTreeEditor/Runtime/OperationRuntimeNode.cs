@@ -49,7 +49,7 @@ namespace BehaviourTreeEditor.Runtime
             };
         }
 
-        public string DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
+        public VariableAccess DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
         {
             var input1 = varHandler.GetOrRegisterVariableBinding(Input1, sb);
             var input2 = varHandler.GetOrRegisterVariableBinding(Input2, sb);
@@ -64,7 +64,7 @@ namespace BehaviourTreeEditor.Runtime
             };
             var name = varHandler.GetCurrentLocalName();
             sb.Declare(name, $"{input1} {op} {input2}", false);
-            return name;
+            return new LocalVariableAccess(name);
         }
     }
 }

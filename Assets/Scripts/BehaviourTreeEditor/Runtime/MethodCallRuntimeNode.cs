@@ -78,7 +78,7 @@ namespace BehaviourTreeEditor.Runtime
             sb.AppendLine($"{paramterName}.{method.Name}({argList});");
         }
 
-        public string DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
+        public VariableAccess DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
         {
             var method = MethodData.Method;
             if (method.ReturnType == typeof(void))
@@ -91,7 +91,7 @@ namespace BehaviourTreeEditor.Runtime
             var name = varHandler.GetCurrentLocalName();
 
             sb.AppendLine($"var {name} = {paramterName}.{method.Name}({argList});");
-            return name;
+            return new LocalVariableAccess(name);
         }
 
         string GenerateArgList(

@@ -36,16 +36,15 @@ namespace BehaviourTreeEditor.Runtime
             return Expression.Field(objectExp, FieldData.Field);
         }
 
-        public string DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
+        public VariableAccess DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
         {
             var fi = FieldData.Field;
 
             if (fi.IsStatic)
             {
                 var name = varHandler.GetCurrentLocalName();
-                sb.Declare(name, $"{TargetType.FullName}.{fi.Name}");
 
-                return name;
+                return new DirectChainedAccess($"{TargetType.FullName}.{fi.Name}");
             }
             else
             {
@@ -54,7 +53,7 @@ namespace BehaviourTreeEditor.Runtime
 
                 sb.Declare(name, $"{sourceName}.{fi.Name}");
 
-                return name;
+                return new LocalVariableAccess(name);
             }
         }
     }

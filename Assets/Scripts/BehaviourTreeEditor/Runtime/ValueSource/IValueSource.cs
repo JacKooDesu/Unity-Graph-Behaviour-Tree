@@ -9,7 +9,7 @@ namespace BehaviourTreeEditor.Runtime
         Type TargetType { get; }
         Expression ToExpression(Dictionary<Type, object> resolver);
         IEnumerable<Type> GetRequiredResolveTypes();
-        string DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb);
+        VariableAccess DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb);
     }
     public interface IValueSource<T> : IValueSource { }
     [Serializable]
@@ -19,7 +19,7 @@ namespace BehaviourTreeEditor.Runtime
         // Expression ToExpression(Dictionary<Type, object> resolver);
         public abstract IEnumerable<Type> GetRequiredResolveTypes();
         public abstract Expression ToExpression(Dictionary<Type, object> resolver);
-        public abstract string DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb);
+        public abstract VariableAccess DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb);
     }
 
     internal static class ValueSourceExtensions

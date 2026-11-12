@@ -28,7 +28,7 @@ namespace BehaviourTreeEditor.Runtime
         {
             public Type TargetType => null;
 
-            public string DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
+            public VariableAccess DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
             {
                 throw new NotImplementedException();
             }

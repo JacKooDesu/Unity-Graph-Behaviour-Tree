@@ -33,9 +33,9 @@ namespace BehaviourTreeEditor.Runtime
             return Expression.Constant(reference, type);
         }
 
-        public string DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
+        public VariableAccess DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
         {
-            return varHandler.GetMethodParameter(TargetType);
+            return new DirectChainedAccess(varHandler.GetMethodParameter(TargetType));
         }
     }
 }

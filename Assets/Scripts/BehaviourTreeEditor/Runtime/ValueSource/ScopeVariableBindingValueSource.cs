@@ -21,13 +21,13 @@ namespace BehaviourTreeEditor.Runtime
             IsConstant = isConst;
         }
 
-        public string DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
+        public VariableAccess DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
         {
             var name = varHandler.GetCurrentLocalName();
             var declare = varHandler.BuildContextVariable(Index, IsConstant);
 
             sb.Declare(name, declare, true);
-            return name;
+            return new LocalVariableAccess(name);
         }
 
         public IEnumerable<Type> GetRequiredResolveTypes() { yield break; }

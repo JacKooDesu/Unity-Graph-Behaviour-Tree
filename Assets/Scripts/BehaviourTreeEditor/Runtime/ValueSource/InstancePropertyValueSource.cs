@@ -38,7 +38,7 @@ namespace BehaviourTreeEditor.Runtime
             return Expression.Property(objectExp, property);
         }
 
-        public string DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
+        public VariableAccess DeclareVariableBinding(VariableHandler varHandler, ScriptBuilder sb)
         {
             var property = PropertyData.Property;
             var name = varHandler.GetCurrentLocalName();
@@ -48,13 +48,11 @@ namespace BehaviourTreeEditor.Runtime
 
             if (property.GetGetMethod().IsStatic)
             {
-                sb.Declare(name, $"{TargetType.FullName}.{property.Name}");
-                return name;
+                return new DirectChainedAccess($"{TargetType.FullName}.{property.Name}");
             }
 
             var sourceName = varHandler.GetOrRegisterVariableBinding(ObjectSource, sb);
-            sb.Declare(name, $"{sourceName}.{property.Name}");
-            return name;
+            return new DirectChainedAccess($"{sourceName}.{property.Name}");
         }
     }
 }
