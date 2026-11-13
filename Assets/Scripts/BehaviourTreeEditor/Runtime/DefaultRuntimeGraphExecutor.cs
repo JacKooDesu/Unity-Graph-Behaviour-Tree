@@ -104,7 +104,9 @@ namespace BehaviourTreeEditor.Runtime
     }
 
     /// <summary>
-    /// 測試用 MonoBehaviour
+    /// A MonoBehaviour that executes a RuntimeGraph for behaviour trees.
+    /// Manages state transitions and variable/context updates during execution.
+    /// <para>Note: OnTick called on FixedUpdate()</para>
     /// </summary>
     public class DefaultRuntimeGraphExecutor : MonoBehaviour, IRuntimeGraphExecutor<DefaultContext>
     {
