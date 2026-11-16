@@ -1,14 +1,14 @@
-using System;
 using Unity.GraphToolkit.Editor;
 using UnityEditor;
 using UnityEditor.Toolbars;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using UGraph = Unity.GraphToolkit.Editor.Graph;
 
 namespace BehaviourTreeEditor.Editor.UIElement
 {
     [GraphToolbarElement("GraphToolBar", typeof(Graph), 1)]
-    internal class GraphToolbarMenuButton : UnityEditor.UIElements.ToolbarMenu, IAccessContainerWindow
+    internal class GraphToolbarMenuButton : ToolbarMenu, IAccessContainerWindow
     {
         public EditorWindow containerWindow { get; set; }
 
