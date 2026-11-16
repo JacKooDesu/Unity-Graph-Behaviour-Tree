@@ -31,12 +31,16 @@ namespace UExtensions.Editor
         {
             label = EditorGUI.BeginProperty(position, label, property);
 
-            // Type property field
             var typeProperty = property.FindPropertyRelative(SField.STYPE_FIELD);
             var typeIdProperty = typeProperty.FindPropertyRelative(SType.TYPE_NAME_FIELD);
             position.height = EditorGUIUtility.singleLineHeight;
-            EditorGUI.PropertyField(position, typeProperty);
-            position.y += EditorGUIUtility.singleLineHeight;
+
+            // Type property field
+            if (property.boxedValue is not SFieldLocked)
+            {
+                EditorGUI.PropertyField(position, typeProperty);
+                position.y += EditorGUIUtility.singleLineHeight;
+            }
 
             // Apply field names
             var fieldIdProperty = property.FindPropertyRelative(SField.MEMBER_NAME_FIELD);
@@ -95,7 +99,7 @@ namespace UExtensions.Editor
                 dropdown.index = 0;
             });
 
-            typeContainer.style.display = property.type != nameof(SFieldLocked) ?
+            typeContainer.style.display = property.boxedValue is not SFieldLocked ?
                 DisplayStyle.Flex : DisplayStyle.None;
 
             container.Add(typeContainer);
