@@ -74,6 +74,9 @@ namespace UExtensions
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             return prop != null;
         }
+
+        public bool IsDefault() =>
+            Type == typeof(SType.None);
     }
 
     [Serializable]

@@ -22,8 +22,8 @@ namespace UExtensions
     public class SType : ISerializationCallbackReceiver
     {
         public const string TYPE_NAME_FIELD = nameof(_typeName);
-        static readonly SType _default = new();
-        public static SType Default => _default;
+        // static readonly SType _default = new();
+        public static SType Default => new();
 
         [SerializeField] string _typeName;
         public Type Type { get; private set; }
@@ -90,12 +90,15 @@ namespace UExtensions
             return type != null;
         }
 
+        public bool IsDefault() =>
+            this.Type == typeof(None);
+
         internal class None
         {
             public static SField DefaultField => new(typeof(None), nameof(__));
             public static SProperty DefaultProperty => new(typeof(None), nameof(___));
             static readonly _ __ = default;
-            public static _ ___ {get; set;}
+            public static _ ___ { get; set; }
             public class _ { }
             public static SMethod DefaultMethod => new(typeof(None), nameof(_method));
             static void _method() { }
