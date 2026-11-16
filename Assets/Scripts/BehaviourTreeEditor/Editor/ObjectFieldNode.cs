@@ -122,5 +122,21 @@ namespace BehaviourTreeEditor.Editor
 
             return false;
         }
+
+        public IPort GetInputTypePort() => GetInputPortByName(TYPE_PORT);
+        public IPort GetInputFieldPort() => GetInputPortByName(FIELD_PORT);
+        public IPort GetOutputTypePort() => GetOutputPortByName(OUTPUT_OBJECT_PORT);
+
+        public static ObjectFieldNode BuildFromSField<T>(ObjectFieldNode node, T sfield)
+            where T : SField
+        {
+            var inputFieldPort = node.GetInputFieldPort();
+            if (sfield is not SFieldLocked sl)
+                sl = new(sfield.Type, sfield.Field.Name);
+
+            inputFieldPort.TrySetValue<SFieldLocked>(sl);
+
+            return node;
+        }
     }
 }

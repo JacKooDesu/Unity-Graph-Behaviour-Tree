@@ -129,5 +129,21 @@ namespace BehaviourTreeEditor.Editor
 
             return false;
         }
+
+        public IPort GetInputTypePort() => GetInputPortByName(TYPE_PORT);
+        public IPort GetInputPropertyPort() => GetInputPortByName(PROPERTY_PORT);
+        public IPort GetOutputTypePort() => GetOutputPortByName(OUTPUT_OBJECT_PORT);
+
+        public static ObjectPropertyNode BuildFromSProperty<T>(ObjectPropertyNode node, T sproperty)
+            where T : SProperty
+        {
+            var inputPropertyPort = node.GetInputPropertyPort();
+            if (sproperty is not SPropertyLocked sp)
+                sp = new(sproperty.Type, sproperty.Property.Name);
+
+            inputPropertyPort.TrySetValue<SPropertyLocked>(sp);
+
+            return node;
+        }
     }
 }

@@ -86,5 +86,8 @@ namespace BehaviourTreeEditor.Editor
 
             return false;
         }
+
+        public IPort GetInputTypePort() => GetInputPortByName(OPTION_NAME);
+        public IPort GetOutputTypePort() => GetOutputPortByName(OUTPUT_TYPE_PORT);
     }
 }

@@ -9,6 +9,8 @@ namespace BehaviourTreeEditor.Editor
     internal interface IReferenceNode
     {
         bool TryGetOutputType(out Type type);
+        IPort GetInputTypePort();
+        IPort GetOutputTypePort();
     }
 
     [Serializable]
@@ -62,6 +64,22 @@ namespace BehaviourTreeEditor.Editor
                     .WithDataType(sType.Type)
                     .Build();
             }
+        }
+
+        public IPort GetInputTypePort() => GetInputPortByName(REF_TYPE_PORT);
+        public IPort GetOutputTypePort() => GetOutputPortByName(OUTPUT_TYPE_PORT);
+
+        public static ReferenceNode BuildFromType(ReferenceNode node, Type type)
+        {
+            return BuildFromSType(node, new(type));
+        }
+
+        public static ReferenceNode BuildFromSType(ReferenceNode node, SType stype)
+        {
+            var inputPort = node.GetInputTypePort();
+            inputPort.TrySetValue<SType>(stype);
+
+            return node;
         }
     }
 }

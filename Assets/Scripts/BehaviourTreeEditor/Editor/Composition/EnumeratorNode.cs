@@ -145,5 +145,8 @@ namespace BehaviourTreeEditor.Editor
                 connectedNodeSet.Remove(port.GetNode());
             }
         }
+
+        public IPort GetInputTypePort() => throw new Exception("Enumerator Node not input with Type port");
+        public IPort GetOutputTypePort() => GetOutputPortByName(ITEM_TYPE_PORT);
     }
 }
