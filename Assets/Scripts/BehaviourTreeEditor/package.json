@@ -1,7 +1,7 @@
 {
   "name": "com.jackoo.gtk-behaviour-tree",
   "displayName": "Graph Toolkit Behaviour Tree",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "unity": "6000.6",
   "author": {
     "name": "jackoodesu",
@@ -10,6 +10,6 @@
   "description": "Behaviour tree editor based on new GTK, with default executor convert tree asset into expression.",
   "dependencies": {
     "com.unity.graphtoolkit": "0.5.0-exp.1",
-    "com.jackoo.unity-serialization-extend": "0.0.1"
+    "com.jackoo.unity-serialization-extend": "0.0.2"
   }
 }
