@@ -84,5 +84,21 @@ namespace UExtensions
     public class SFieldLocked : SField
     {
         public SFieldLocked(Type type, string fieldName) : base(type, fieldName) { }
+
+        public static SFieldLocked FromType(Type type)
+        {
+            var field = type
+                .GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+                .FirstOrDefault();
+
+            if (field is null)
+            {
+                var d = SField.DefaultField;
+                type = d.Type;
+                field = d.Field;
+            }
+
+            return new(type, field.Name);
+        }
     }
 }

@@ -83,5 +83,21 @@ namespace UExtensions
     public class SPropertyLocked : SProperty
     {
         public SPropertyLocked(Type type, string propName) : base(type, propName) { }
+
+        public static SPropertyLocked FromType(Type type)
+        {
+            var property = type
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+                .FirstOrDefault();
+
+            if (property is null)
+            {
+                var d = SProperty.DefaultProperty;
+                type = d.Type;
+                property = d.Property;
+            }
+
+            return new(type, property.Name);
+        }
     }
 }
