@@ -103,5 +103,36 @@ namespace BehaviourTreeEditor.Editor
 
             return null;
         }
+
+        public static bool TryGetReferenceNodeByPort(this IPort port, out IReferenceNode referenceNode)
+        {
+            referenceNode = default;
+
+            var node = port.GetNode();
+            if (node is IReferenceNode rn)
+            {
+                referenceNode = rn;
+                return true;
+            }
+
+            if (node is ISubgraphNode subgraphNode)
+            {
+                var index = 0;
+                foreach (var p in subgraphNode.GetOutputPorts())
+                {
+                    if (p == port)
+                        break;
+                    index++;
+                }
+
+                var list = new List<IVariableNode>();
+                var graph = subgraphNode.GetSubgraph();
+                graph.GetVariable(index).GetNodes(list);
+
+                return list.FirstOrDefault()?.GetInputPort(0).FirstConnectedPort.TryGetReferenceNodeByPort(out referenceNode) ?? false;
+            }
+
+            return false;
+        }
     }
 }
