@@ -51,16 +51,4 @@ namespace BehaviourTreeEditor.Editor
                 .Build();
         }
     }
-
-    [Serializable]
-    [UseWithContext(typeof(VariableBindings))]
-    internal class IntBinding : VariableBindingBlockBase<int> { }
-
-    [Serializable]
-    [UseWithContext(typeof(VariableBindings))]
-    internal class FloatBinding : VariableBindingBlockBase<float> { }
-
-    [Serializable]
-    [UseWithContext(typeof(VariableBindings))]
-    internal class UIntBinding : VariableBindingBlockBase<uint> { }
 }
