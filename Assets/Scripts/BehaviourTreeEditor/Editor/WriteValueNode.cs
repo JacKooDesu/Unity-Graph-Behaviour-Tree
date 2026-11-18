@@ -14,22 +14,33 @@ namespace BehaviourTreeEditor.Editor
         {
             IValueSource left = default;
             var inputPort = GetInputPortByName(TARGET);
-            if (inputPort.TryGetValue<SField>(out var fieldData))
+            if (inputPort.IsConnected)
             {
-                left = new ClassFieldValueSource(fieldData);
-            }
-            else if (inputPort.TryGetValue<SProperty>(out var propertyData))
-            {
-                left = new ClassPropertyValueSource(propertyData);
-            }
-            else if (inputPort.ToValueSource() is IValueSource valueSource)
-            {
-                left = valueSource;
+                if (inputPort.ToValueSource() is IValueSource valueSource)
+                {
+                    left = valueSource;
+                }
+                else
+                {
+                    Debug.LogError("Failed to get value type option");
+                    return new UndefinedRuntimeNode();
+                }
             }
             else
             {
-                Debug.LogError("Failed to get value type option");
-                return new UndefinedRuntimeNode();
+                if (inputPort.TryGetValue<SField>(out var fieldData))
+                {
+                    left = new ClassFieldValueSource(fieldData);
+                }
+                else if (inputPort.TryGetValue<SProperty>(out var propertyData))
+                {
+                    left = new ClassPropertyValueSource(propertyData);
+                }
+                else
+                {
+                    Debug.LogError("Failed to get value type option");
+                    return new UndefinedRuntimeNode();
+                }
             }
 
             if (left is InstancePropertyValueSource propertySource &&
@@ -99,7 +110,7 @@ namespace BehaviourTreeEditor.Editor
                 fieldData.Field.FieldType != SField.DefaultField.Type)
                 return fieldData.Field.FieldType;
 
-            if (port.FirstConnectedPort.GetNode() is IReferenceNode rn &&
+            if (port.FirstConnectedPort.TryGetReferenceNodeByPort(out var rn) &&
                 rn.TryGetOutputType(out var sourceType))
                 return sourceType;
 
