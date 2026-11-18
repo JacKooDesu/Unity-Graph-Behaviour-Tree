@@ -299,7 +299,8 @@ namespace BehaviourTreeEditor.Editor.UIElement
                 }
 
                 // assign name
-                subtitleNames.Add(title);
+                // FIXME: Subtitle 及顏色目前無法指定生效
+                subtitleNames.Insert(0, title);
                 setSubgraphNodeDisplayAction?.Invoke(string.Join('.', subtitleNames), "");
             }
 
