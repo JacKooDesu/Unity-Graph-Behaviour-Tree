@@ -126,9 +126,12 @@ namespace BehaviourTreeEditor.Editor
             Type type;
             var inputPort = GetInputPortByName(TYPE);
 
+            if (inputPort is null)
+                return;
+
             if (inputPort.IsConnected)
             {
-                if (inputPort?.FirstConnectedPort?.GetNode() is not IReferenceNode rn ||
+                if (!inputPort.FirstConnectedPort.TryGetReferenceNodeByPort(out var rn) ||
                     !rn.TryGetOutputType(out type))
                     return;
             }

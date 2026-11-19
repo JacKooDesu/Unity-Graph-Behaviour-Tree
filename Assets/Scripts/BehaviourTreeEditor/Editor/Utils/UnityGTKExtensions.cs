@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using BehaviourTreeEditor.Runtime;
 using Unity.GraphToolkit.Editor;
 
@@ -17,6 +19,7 @@ namespace BehaviourTreeEditor.Editor
                     IConstantNode constantNode => constantNode.ToValueSource(),
                     IValueSourceConvertable convertableNode => convertableNode.ToValueSource(),
                     EnumeratorNode enumeratorNode => enumeratorNode.ToValueSource(),
+                    ISubgraphNode subgraph => FromSubgraph(subgraph, port.FirstConnectedPort),
                     _ => throw new InvalidOperationException($"Failed to convert port to value source: {port}")
                 };
             }
@@ -39,6 +42,23 @@ namespace BehaviourTreeEditor.Editor
             if (source is null)
                 throw new InvalidOperationException("Failed to convert port to value source");
             return source;
+
+            static IValueSource FromSubgraph(ISubgraphNode subgraphNode, IPort firstConnectedPort)
+            {
+                var index = 0;
+                foreach (var port in subgraphNode.GetOutputPorts())
+                {
+                    if (port == firstConnectedPort)
+                        break;
+
+                    index++;
+                }
+                var list = new List<IVariableNode>();
+                var graph = subgraphNode.GetSubgraph();
+                graph.GetVariable(index).GetNodes(list);
+
+                return list.FirstOrDefault()?.GetInputPort(0).ToValueSource() as IValueSource;
+            }
         }
 
         public static object ToValueSource(this IVariableNode node)
@@ -82,6 +102,37 @@ namespace BehaviourTreeEditor.Editor
             }
 
             return null;
+        }
+
+        public static bool TryGetReferenceNodeByPort(this IPort port, out IReferenceNode referenceNode)
+        {
+            referenceNode = default;
+
+            var node = port.GetNode();
+            if (node is IReferenceNode rn)
+            {
+                referenceNode = rn;
+                return true;
+            }
+
+            if (node is ISubgraphNode subgraphNode)
+            {
+                var index = 0;
+                foreach (var p in subgraphNode.GetOutputPorts())
+                {
+                    if (p == port)
+                        break;
+                    index++;
+                }
+
+                var list = new List<IVariableNode>();
+                var graph = subgraphNode.GetSubgraph();
+                graph.GetVariable(index).GetNodes(list);
+
+                return list.FirstOrDefault()?.GetInputPort(0).FirstConnectedPort.TryGetReferenceNodeByPort(out referenceNode) ?? false;
+            }
+
+            return false;
         }
     }
 }

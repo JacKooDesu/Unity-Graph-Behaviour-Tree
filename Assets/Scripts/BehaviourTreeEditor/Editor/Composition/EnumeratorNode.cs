@@ -46,7 +46,7 @@ namespace BehaviourTreeEditor.Editor
             var input = GetInputPortByName(ENUMERATOR_PORT);
             if (input == null) return;
 
-            if (input.FirstConnectedPort.GetNode() is IReferenceNode refNode &&
+            if (input.FirstConnectedPort.TryGetReferenceNodeByPort(out var refNode) &&
                 refNode.TryGetOutputType(out var type) &&
                 type.TryGetEnumerableType(out var elementType))
             {
@@ -77,7 +77,7 @@ namespace BehaviourTreeEditor.Editor
                 return false;
             }
 
-            if (input.FirstConnectedPort.GetNode() is IReferenceNode refNode &&
+            if (input.FirstConnectedPort.TryGetReferenceNodeByPort(out var refNode) &&
                 refNode.TryGetOutputType(out var enumableType) &&
                 enumableType.TryGetEnumerableType(out type))
                 return true;

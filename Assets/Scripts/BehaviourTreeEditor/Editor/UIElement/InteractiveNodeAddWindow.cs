@@ -4,13 +4,15 @@ using UExtensions;
 using UExtensions.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
+using UGraph = Unity.GraphToolkit.Editor.Graph;
 
 namespace BehaviourTreeEditor.Editor.UIElement
 {
     internal class InteractiveNodeAddWindow : PopupWindowContent
     {
-        StateTreeGraph _graph;
+        UGraph _graph;
 
         VisualElement _root;
         List<SerializedObject> _targetChain = new();
@@ -36,7 +38,8 @@ namespace BehaviourTreeEditor.Editor.UIElement
                 _root.Add(container);
 
             _root.Add(BuildAddRemoveButton());
-            _root.Add(new Button(BuildNodes) { text = "Build Nodes" });
+            _root.Add(new Button(() => BuildNodes(false)) { text = "Build Nodes" });
+            _root.Add(new Button(() => BuildNodes(true)) { text = "Build Nodes (As Subgraph)" });
 
             return _root;
         }
@@ -214,15 +217,41 @@ namespace BehaviourTreeEditor.Editor.UIElement
             ReBuildTargetChainedFromIndex(_targetChain.Count - 1);
         }
 
-        void BuildNodes()
+        void BuildNodes(bool asSubgraph)
         {
-            _graph.UndoBeginRecordGraph("Build Nodes");
+            // local action that handle subgraph node display info (title / subtitle)
+            Action<string, string> setSubgraphNodeDisplayAction = default;
+            string title = string.Empty;
+            List<string> subtitleNames = new();
+            var graph = this._graph;
+
+            if (asSubgraph)
+            {
+                graph.UndoBeginRecordGraph("Add sub node");
+                var subgraphNode = graph.CreateLocalSubgraphNode<WrappedVariableSubgraph>("", Vector2.zero);
+                var tmpBaseGraph = graph;
+                graph.UndoEndRecordGraph();
+                setSubgraphNodeDisplayAction = (title, subtitle) =>
+                {
+                    // FIXME: Subtitle 及顏色目前無法指定生效
+                    tmpBaseGraph.UndoBeginRecordGraph("Config subgraph node");
+                    subgraphNode.Title = title;
+                    subgraphNode.Subtitle = subtitle;
+                    subgraphNode.DefaultColor = Color.orangeRed;
+                    tmpBaseGraph.UndoEndRecordGraph();
+                };
+
+                graph = subgraphNode.GetSubgraph();
+            }
+
+            graph.UndoBeginRecordGraph("Build Nodes");
 
             // base node should be reference
             var baseType = (GetSTargetData(0) as SType);
             var baseNode = new ReferenceNode();
-            _graph.AddNode(baseNode);
+            graph.AddNode(baseNode);
             ReferenceNode.BuildFromSType(baseNode, baseType);
+            title = baseType.Type.Name;
 
             Node lastNode = baseNode;
 
@@ -236,6 +265,19 @@ namespace BehaviourTreeEditor.Editor.UIElement
                     _ => throw new Exception("Invalid node")
                 };
 
+                // operate chain name if subgraph
+                if (asSubgraph)
+                {
+                    subtitleNames.Add(
+                        data switch
+                        {
+                            SField f => f.Field.Name,
+                            SProperty p => p.Property.Name,
+                            _ => ""
+                        }
+                    );
+                }
+
                 lastNode = data switch
                 {
                     SField f => ObjectFieldNode.BuildFromSField(node as ObjectFieldNode, f),
@@ -244,12 +286,30 @@ namespace BehaviourTreeEditor.Editor.UIElement
                 };
             }
 
-            _graph.UndoEndRecordGraph();
+            if (asSubgraph)
+            {
+                foreach (var port in lastNode.GetOutputPorts())
+                {
+                    var variable = graph.CreateVariable(
+                        port.DisplayName,
+                        valueType: port.DataType,
+                        kind: Unity.GraphToolkit.Editor.VariableKind.Output);
+                    var varNode = graph.AddVariableNode(variable, Vector2.zero);
+                    graph.Connect(port, varNode.GetInputPort(0));
+                }
+
+                // assign name
+                // FIXME: Subtitle 及顏色目前無法指定生效
+                subtitleNames.Insert(0, title);
+                setSubgraphNodeDisplayAction?.Invoke(string.Join('.', subtitleNames), "");
+            }
+
+            graph.UndoEndRecordGraph();
 
             Node AddFieldNode()
             {
                 var node = new ObjectFieldNode();
-                _graph.AddNode(node);
+                graph.AddNode(node);
                 ConnectTypeInfo(lastNode as IReferenceNode, node);
                 node.DefineNode();
                 return node;
@@ -258,14 +318,14 @@ namespace BehaviourTreeEditor.Editor.UIElement
             Node AddPropertyNode()
             {
                 var node = new ObjectPropertyNode();
-                _graph.AddNode(node);
+                graph.AddNode(node);
                 ConnectTypeInfo(lastNode as IReferenceNode, node);
                 node.DefineNode();
                 return node;
             }
 
             void ConnectTypeInfo(IReferenceNode last, IReferenceNode current) =>
-                _graph.Connect(last.GetOutputTypePort(), current.GetInputTypePort());
+                graph.Connect(last.GetOutputTypePort(), current.GetInputTypePort());
         }
     }
 }

@@ -67,7 +67,7 @@ namespace BehaviourTreeEditor.Editor
             if (!typePort.IsConnected)
                 return;
 
-            if (typePort.FirstConnectedPort.GetNode() is not IReferenceNode rn ||
+            if (!typePort.FirstConnectedPort.TryGetReferenceNodeByPort(out var rn) ||
                 !rn.TryGetOutputType(out var type))
                 return;
 

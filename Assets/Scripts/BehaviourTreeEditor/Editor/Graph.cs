@@ -144,4 +144,12 @@ namespace BehaviourTreeEditor.Editor
             }
         }
     }
+
+    [Serializable]
+    [Subgraph(typeof(StateTreeGraph))]
+    [Graph(EXTENSION_NAME, GraphOptions.Default)]
+    internal class WrappedVariableSubgraph : UGraph
+    {
+        const string EXTENSION_NAME = "wvsg";
+    }
 }
